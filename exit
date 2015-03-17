@@ -1,0 +1,47 @@
+=> [32m#<Savon::Client:0xb5a2c8c0[0m
+ @globals[32m=[0m
+  [32m#<Savon::GlobalOptions:0xb5a2c8ac[0m
+   @option_type[32m=[0m[33m:global[0m,
+   @options[32m=[0m
+    {[33m:encoding[0m=>[31m[1;31m"[0m[31mUTF-8[1;31m"[0m[31m[0m,
+     [33m:soap_version[0m=>[1;34m1[0m,
+     [33m:namespaces[0m=>{},
+     [33m:logger[0m=>
+      [32m#<Logger:0xb5a2c870[0m
+       @default_formatter[32m=[0m[32m#<Logger::Formatter:0xb5a2c848[0m @datetime_format[32m=[0m[1;36mnil[0m[32m>[0m,
+       @formatter[32m=[0m[32m#<Logger::SimpleFormatter:0xb5a2c7d0[0m @datetime_format[32m=[0m[1;36mnil[0m[32m>[0m,
+       @level[32m=[0m[1;34m0[0m,
+       @logdev[32m=[0m
+        [32m#<Logger::LogDevice:0xb5a2c820[0m
+         @dev[32m=[0m[32m#<IO:<STDOUT>>[0m,
+         @filename[32m=[0m[1;36mnil[0m,
+         @mutex[32m=[0m
+          [32m#<Logger::LogDevice::LogDeviceMutex:0xb5a2c80c[0m
+           @mon_count[32m=[0m[1;34m0[0m,
+           @mon_mutex[32m=[0m[32m#<Mutex:0xb5a2c7e4[0m[32m>[0m,
+           @mon_owner[32m=[0m[1;36mnil[0m[32m>[0m,
+         @shift_age[32m=[0m[1;36mnil[0m,
+         @shift_size[32m=[0m[1;36mnil[0m[32m>[0m,
+       @progname[32m=[0m[1;36mnil[0m[32m>[0m,
+     [33m:log[0m=>[1;36mfalse[0m,
+     [33m:filters[0m=>[],
+     [33m:pretty_print_xml[0m=>[1;36mfalse[0m,
+     [33m:raise_errors[0m=>[1;36mtrue[0m,
+     [33m:strip_namespaces[0m=>[1;36mtrue[0m,
+     [33m:convert_response_tags_to[0m=>
+      [32m#<Proc:0xb5a2c794@/home/phillipkregg/.rvm/gems/ruby-1.9.3-p547/gems/savon-2.10.0/lib/savon/options.rb:85 (lambda)>[0m,
+     [33m:convert_attributes_to[0m=>
+      [32m#<Proc:0xb5a2c780@/home/phillipkregg/.rvm/gems/ruby-1.9.3-p547/gems/savon-2.10.0/lib/savon/options.rb:86 (lambda)>[0m,
+     [33m:multipart[0m=>[1;36mfalse[0m,
+     [33m:adapter[0m=>[1;36mnil[0m,
+     [33m:use_wsa_headers[0m=>[1;36mfalse[0m,
+     [33m:no_message_tag[0m=>[1;36mfalse[0m,
+     [33m:follow_redirects[0m=>[1;36mfalse[0m,
+     [33m:wsdl[0m=>
+      [31m[1;31m"[0m[31mhttp://teamforge.corp.motion-ind.com/ce-soap60/services/CollabNet?wsdl[1;31m"[0m[31m[0m}[32m>[0m,
+ @wsdl[32m=[0m
+  [32m#<Wasabi::Document:0xb5a2c438[0m
+   @adapter[32m=[0m[1;36mnil[0m,
+   @document[32m=[0m
+    [31m[1;31m"[0m[31mhttp://teamforge.corp.motion-ind.com/ce-soap60/services/CollabNet?wsdl[1;31m"[0m[31m[0m,
+   @request[32m=[0m[32m#<HTTPI::Request:0xb5a2c410[0m @follow_redirect[32m=[0m[1;36mfalse[0m[32m>[0m[32m>[0m[32m>[0m
