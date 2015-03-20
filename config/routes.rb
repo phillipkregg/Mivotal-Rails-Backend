@@ -1,7 +1,8 @@
 Teamforge::Application.routes.draw do
   
-  match 'home/index' => 'home#index'
+  match 'home/initialize' => 'home#index'
   match 'home/set_tracker_data' => 'home#set_tracker_data'
+  match 'home/get_all_planning_folders' => 'home#get_all_planning_folders'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -52,7 +53,7 @@ Teamforge::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'home#index'
+  #root :to => 'home#index'
 
   # See how all your routes lay out with "rake routes"
 

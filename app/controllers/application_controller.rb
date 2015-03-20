@@ -1,5 +1,6 @@
 
 require 'pry'
+require 'pry-debugger'
 require 'savon'
 require 'nokogiri'
 require 'json'

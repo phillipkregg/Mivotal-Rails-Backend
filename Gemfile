@@ -38,6 +38,7 @@ gem 'jquery-rails'
 gem 'debugger'
 
 gem 'pry'
+gem 'pry-debugger'
 
 #gem 'savon', '~> 2.0'
 

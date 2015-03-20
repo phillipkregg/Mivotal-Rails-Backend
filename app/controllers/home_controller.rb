@@ -5,20 +5,51 @@ class HomeController < ApplicationController
 
   @session_id
   @planning_folder_id
+  @motion_mobile_project_id = "proj1038"
 
   Gyoku.xml({ :camel_case => "key" }, { :key_converter => :camelcase })
 
 
   def index
-    login
+    
+    @session_id = login
     getArtifactList    
+
+  end
+
+
+  def get_all_planning_folders
+
+    login
+
+    session = @session_id
+
+    client = Savon::Client.new do |wsdl, http| 
+      wsdl.document = "http://teamforge.corp.motion-ind.com/ce-soap60/services/PlanningApp?wsdl"
+      wsdl.endpoint = "http://teamforge.corp.motion-ind.com/ce-soap60/services/PlanningApp?wsdl"
+    end
+    
+    
+    response = client.request  :ser, :get_planning_folder_list do      
+      soap.namespaces["xmlns:ser"] = "http://schema.open.collab.net/sfee50/soap60/service"
+      soap.body = {
+        sessionId: session, 
+        parentId: 'proj1038',
+        recursive: true
+      }
+    end   
+
+
+    render :json => response
+
 
   end
 
 
   def set_tracker_data
     login
-    session = @session_id    
+    session = @session_id       
+
 
     namespaces = {
       "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
@@ -69,7 +100,7 @@ class HomeController < ApplicationController
       "lastModifiedDate" => params["last_modified_date"],
       #{}"path" => 
       "planningFolderId" => params["planning_folder_id"],
-      "points" => params["points"],
+      "points" => params["points"].to_s,
       "priority" => params["priority"],
       "remainingEffort" => params["remaining_effort"],
       #{}"reportedReleaseId" => params["reported_in_release_id"],
@@ -77,27 +108,19 @@ class HomeController < ApplicationController
       "status" => params["status"],
       "statusClass" => params["status_class"],
       "title" => params["title"],
-      "version" => params["version"]
+      "version" => params["version"]      
     }
 
 
     #my_xml = Crack::XML.parse(response)
+    #updated_params = Hash[params.map { |k, v|  [teamforge_keys[k], v] }]
 
-    #binding.pry
-
-
-   
-
-    updated_params = Hash[params.map { |k, v|  [teamforge_keys[k], v] }]
-
-    binding.pry
 
     client = Savon::Client.new do |wsdl, http| 
       wsdl.document = "http://teamforge.corp.motion-ind.com/ce-soap60/services/TrackerApp?wsdl"
       wsdl.endpoint = "http://teamforge.corp.motion-ind.com/ce-soap60/services/TrackerApp?wsdl"
     end
-
-    binding.pry
+      
     
     response = client.request  :ser, :set_artifact_data do 
       
@@ -107,32 +130,10 @@ class HomeController < ApplicationController
         artifactData: new_hash
       }
 
-    end   
+    end         
 
-    binding.pry
-
+    render :nothing => true      
     
-    params.delete("artifactGroup")
-    params.delete("home")
-    params.delete("childrenIds")
-    params.delete("soapenc:root")
-    params.delete("soapenv:encodingStyle")
-    params.delete("xmlns:ns16")
-    params.delete("xmlns:soapenc")
-    params.delete("xsi:type")
-    params.delete("xmlns:ns13")
-
-    actualEffort = params['actualEffort']
-    title = "Entry View Prototype Screen 4"
-
-
-  
-    params_xml = params.to_xml
-    
-    #binding.pry
-   
-
-    #binding.pry
     
   end
 
@@ -174,42 +175,20 @@ class HomeController < ApplicationController
   end
 
 
-  def login_SAVON2
+  
 
-    Gyoku.xml({ :camel_case => "key" }, { :key_converter => :none })
 
-    namespaces = {
-      "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
-      "xmlns:xsd" => "http://www.w3.org/2001/XMLSchema",
-      "xmlns:soapenv" => "http://schemas.xmlsoap.org/soap/envelope/",
-      "xmlns:ser" => "http://schema.open.collab.net/sfee50/soap60/service",
-      "xmlns:soapenc" => "http://schemas.xmlsoap.org/soap/encoding/"
 
-    }
+  def getArtifactList     
 
-    client = Savon.client(
-      wsdl: "http://teamforge.corp.motion-ind.com/ce-soap60/services/CollabNet?wsdl",
-      convert_request_keys_to: :none,
-      namespaces: namespaces,
-      strip_namespaces: false,
-      endpoint: "http://teamforge.corp.motion-ind.com/ce-soap60/services/CollabNet?wsdl"
-    )
+    if params[:planning_folder_id]
+      planning_folder_id = params[:planning_folder_id]
+    else
+      planning_folder_id = params["planning_folder_id"]
+    end
+
 
     
-    response = client.call(:login, message: { userName: "dp078971", password: "Geddy321!" })
-     
-    response_hash = Hash.from_xml(response.to_s)
-    
-    login_response = response_hash["Envelope"]["Body"]["loginResponse"]
-    @session_id = login_response["loginReturn"]
-
-  end
-
-
-
-  def getArtifactList
-
-    @planning_folder_id = "plan1334"
     session = @session_id
     namespaces = {
       "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
@@ -227,32 +206,23 @@ class HomeController < ApplicationController
       wsdl.endpoint = "http://teamforge.corp.motion-ind.com/ce-soap60/services/PlanningApp?wsdl"
 
     end
-
-    response = client.request  "ser", "getRankedArtifactList" do       
+    
+    response = client.request  "ser", "getArtifactListInPlanningFolder" do       
       soap.namespaces["xmlns:ser"] = "http://schema.open.collab.net/sfee50/soap60/service"
       soap.body = {
         sessionId: session, 
-        planningFolderId: "plan1334"
+        parentId: planning_folder_id,
+        recursive: true
       }
-    end   
+    end       
+
+        
+    response.body[:session_id] = session
   
-    data = response.body[:multi_ref]
-=begin
-    response_hash = Hash.from_xml response.to_xml
-
-    xml = Nokogiri::XML(response_hash.to_xml)
-
-    multiRef = xml.xpath("//multiRef")
-
-=end
-
-    #binding.pry
-
-
+    data = response.body
     
     render :json => data
-
-    #binding.pry
+    
     
   end
 
@@ -282,10 +252,7 @@ class HomeController < ApplicationController
 
     client = Savon::Client.new do |wsdl, http|
 
-    end
-
-    binding.pry
-
+    end   
     
     response = client.call(:get_ranked_artifact_list, message: { sessionId: session, planningFolderId: @planning_folder_id })
 
@@ -295,27 +262,13 @@ class HomeController < ApplicationController
 
     
     my_json = my_xml.to_json
-
-    #binding.pry
-
-
-    #response_hash = Hash.from_xml(response.to_s)
-    response_hash = my_xml.to_hash
-    
-
-    #data = response_hash[:multi_ref][0][:data_rows]
-
-    #data = response.body[:multi_ref] 
-
-    #data = my_json
+   
+    response_hash = my_xml.to_hash  
 
     data = response_hash["soapenv:Envelope"]["soapenv:Body"]["multiRef"]
-
     
-
     render :json => data
-
-    #binding.pry
+    
     
   end
 
